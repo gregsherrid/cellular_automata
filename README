@@ -1,0 +1,7 @@
+Cellular Automata
+-----------------
+
+Sinatra app to define cullar automata, display them, 
+and save them for future displays.
+
+(c) Greg Sherrid, 2014
