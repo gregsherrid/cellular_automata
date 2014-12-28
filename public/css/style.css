@@ -1,0 +1,9 @@
+#home {
+	margin-bottom: 30px;
+}
+
+canvas#cellDisplay {
+	background: #ccc;
+	margin: 0 auto;
+	display: block;
+}

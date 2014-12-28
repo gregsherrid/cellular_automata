@@ -1,6 +1,9 @@
 require "sinatra"
 require "sinatra/activerecord"
+require "./lib/grid_builder.rb"
 
-get '/' do
-	'Hello world! I am a cell!'
+# helpers GridBuilder
+
+get "/" do
+	erb :home
 end
