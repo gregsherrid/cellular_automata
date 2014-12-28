@@ -1,16 +1,48 @@
 function runAutomata() {
 	var canvas = document.getElementById("cellDisplay");
-	var gd = new GridDisplay(canvas, {
-		height: 120,
-		width: 250,
-		scale: 3
+
+	var width = 500;
+	var height = 500;
+	var scale = 1;
+
+	var gd = new Grid(canvas, {
+		width: width,
+		height: height,
+		scale: scale
 	});
+
+	//Each color is drawn from above
+	function tickDrawDown( x, y, oldGrid, newGrid ) {
+		var fromY = (y-1+height)%height;
+		for ( var i=0; i<3; i++ ) {
+			newGrid[x][y][i] = oldGrid[x][fromY][i];
+		}
+	}
+
+	var startTime = Date.now();
+	var count = 0;
+	function runTick() {
+		gd.tick(tickDrawDown);
+		count += 1;
+		if (count < 1000) {
+			setTimeout(runTick, 1);
+		} else {
+			var endTime = Date.now();
+			console.log("Done!");
+			console.log("Start time: " + startTime);
+			console.log("End time: " + endTime);
+			console.log("Elapsed: " + (endTime - startTime));
+		}
+	};
+	runTick();
+
 };
 
-function GridDisplay(canvas, ops) {
+function Grid(canvas, ops) {
 
 	var width = ops.width;
 	var height = ops.height;
+
 	var scale = ops.scale;
 	var dispWidth = width * scale;
 	var dispHeight = height * scale;
@@ -20,6 +52,41 @@ function GridDisplay(canvas, ops) {
 
 	var context = canvas.getContext('2d');
 	var imgd = context.getImageData(0, 0, dispWidth, dispHeight);
+
+	var aIsCurrent = true;
+	var gridA = initDisplay();
+	var gridB = cloneGrid(gridA);
+
+	this.width = function() {
+		return width;
+	}
+	this.height = function() {
+		return height;
+	}
+
+	this.tick = function(tickF) {
+
+		var newGrid, oldGrid;
+		if (aIsCurrent) {
+			oldGrid = gridA;
+			newGrid = gridB;
+		} else {
+			oldGrid = gridB;
+			newGrid = gridA;
+		}
+		aIsCurrent = !aIsCurrent;
+
+		//As we run, we read out of oldGrid
+		//and feed values into newGrid
+
+		for (var i=0; i<width; i++) {
+			for (var j=0; j<height; j++) {
+				tickF(i, j, oldGrid, newGrid);
+			}
+		}
+		toPixList(newGrid, imgd.data, scale);
+		context.putImageData(imgd, 0, 0);
+	}
 
 	function initDisplay() {
 
@@ -43,8 +110,6 @@ function GridDisplay(canvas, ops) {
 		context.putImageData(imgd, 0, 0);
 		return grid;
 	}
-
-	initDisplay();
 
 	function toGrid(pix, w, h, scale) {
 
@@ -118,4 +183,25 @@ function GridDisplay(canvas, ops) {
 	}
 }
 
+function Cell(x, y, tickF) {
+	this.red = null;
+	this.green = null;
+	this.blue = null;
+
+	this.north = null;
+	this.northeast = null;
+	this.east = null;
+	this.southeast = null;
+	this.south = null;
+	this.northeast = null;
+	this.east = null;
+	this.southeast = null;
+	this.south = null;
+}
+
 runAutomata();
+
+
+
+
+
