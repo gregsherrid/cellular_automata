@@ -1,13 +1,13 @@
 function runAutomata() {
 	var canvas = document.getElementById("cellDisplay");
 
-	var width = 500;
 	var height = 500;
+	var width = 500;
 	var scale = 1;
 
-	var gd = new Grid(canvas, {
-		width: width,
+	var gd = new GridDisplay(canvas, {
 		height: height,
+		width: width,
 		scale: scale
 	});
 
@@ -38,11 +38,10 @@ function runAutomata() {
 
 };
 
-function Grid(canvas, ops) {
+function GridDisplay(canvas, ops) {
 
 	var width = ops.width;
 	var height = ops.height;
-
 	var scale = ops.scale;
 	var dispWidth = width * scale;
 	var dispHeight = height * scale;
@@ -56,13 +55,6 @@ function Grid(canvas, ops) {
 	var aIsCurrent = true;
 	var gridA = initDisplay();
 	var gridB = cloneGrid(gridA);
-
-	this.width = function() {
-		return width;
-	}
-	this.height = function() {
-		return height;
-	}
 
 	this.tick = function(tickF) {
 
@@ -79,8 +71,8 @@ function Grid(canvas, ops) {
 		//As we run, we read out of oldGrid
 		//and feed values into newGrid
 
-		for (var i=0; i<width; i++) {
-			for (var j=0; j<height; j++) {
+		for ( var i=0; i<width; i++ ) {
+			for ( var j=0; j<height; j++ ) {
 				tickF(i, j, oldGrid, newGrid);
 			}
 		}
@@ -183,25 +175,4 @@ function Grid(canvas, ops) {
 	}
 }
 
-function Cell(x, y, tickF) {
-	this.red = null;
-	this.green = null;
-	this.blue = null;
-
-	this.north = null;
-	this.northeast = null;
-	this.east = null;
-	this.southeast = null;
-	this.south = null;
-	this.northeast = null;
-	this.east = null;
-	this.southeast = null;
-	this.south = null;
-}
-
 runAutomata();
-
-
-
-
-

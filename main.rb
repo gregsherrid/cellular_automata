@@ -1,8 +1,8 @@
 require "sinatra"
 require "sinatra/activerecord"
-require "./lib/grid_builder.rb"
+require "./db_config"
 
-# helpers GridBuilder
+init_db
 
 get "/" do
 	erb :home

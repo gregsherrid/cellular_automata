@@ -1,0 +1,7 @@
+development:
+  database:
+    host: localhost
+    db_name: cellular_automata_db
+    port: 5432
+    username: cellular_automata
+    password: conway
