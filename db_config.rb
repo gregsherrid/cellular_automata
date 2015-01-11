@@ -1,8 +1,7 @@
-env = "development"
-DB_CONFIG = YAML.load(File.open("./config.yml"))[env]["database"]
+def init_db(env)
+	config = YAML.load(File.open("./config.yml"))[env.to_s]["database"]
 
-def init_db
-	url = "postgres://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['db_name']}"
+	url = "postgres://#{config['username']}:#{config['password']}@#{config['host']}:#{config['port']}/#{config['db_name']}"
 	db = URI.parse(url)
 
 	ActiveRecord::Base.establish_connection(

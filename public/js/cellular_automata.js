@@ -15,17 +15,10 @@ function runAutomata() {
 // It runs 1000 ticks with a simple tick function, then shuts down
 function tickTimeTest(gd) {
 
-	//Each color draws from the cell above it
-	function tickDrawDown(cell, pixData) {
-		cell.red = pixData[cell.north.redLoc];
-		cell.green = pixData[cell.north.greenLoc];
-		cell.blue = pixData[cell.north.blueLoc];
-	}
-
 	var startTime = Date.now();
 	var count = 0;
 	function runTick() {
-		gd.tick(tickDrawDown);
+		gd.tick(currentTickFunction);
 		count += 1;
 		if (count < 1000) {
 			setTimeout(runTick, 1);
