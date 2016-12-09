@@ -8,6 +8,10 @@ Dir["./lib/*.rb"].each { |file| require file }
 configure :development do
 	use BetterErrors::Middleware
 	BetterErrors.application_root = __dir__
+	require "pry"
+end
+configure :test do
+	require "pry"
 end
 
 helpers Interpreter

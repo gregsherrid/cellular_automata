@@ -18,7 +18,7 @@ class Token
 		if s == "="
 			AssignmentToken.new(s)
 
-		elsif OPERATORS.include?(s) || is_number?(s)
+		elsif OPERATORS.include?(s) || is_number?(s) || ["(", ")"].include?(s)
 			OperatorToken.new(s)
 
 		elsif ATTRIBUTES.include?(s)
@@ -31,7 +31,7 @@ class Token
 			NeighborAttributeToken.new(s)
 
 		else
-			raise ProgramSyntaxError.new("Unrecognized token", s)
+			raise ProgramSyntaxError.new("Unrecognized Token", s)
 		end
 	end
 
@@ -52,7 +52,7 @@ class Token
 		if ATTRIBUTES.include?(s)
 			s.downcase
 		else
-			raise ProgramSyntaxError.new("Unknown attribute", s)
+			raise ProgramSyntaxError.new("Unknown Attribute", s)
 		end
 	end
 
@@ -60,7 +60,7 @@ class Token
 		if NEIGHBORS.include?(s)
 			s.downcase
 		else
-			raise ProgramSyntaxError.new("Unknown neighbor", s)
+			raise ProgramSyntaxError.new("Unknown Neighbor", s)
 		end
 	end
 end
