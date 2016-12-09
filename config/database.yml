@@ -1,0 +1,26 @@
+production:
+  password: <%= ENV['ALBUS_DATABASE_PASSWORD'] %>
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: cellular_automata_db
+  username: cellular_automata
+  password: conway
+  pool: 5
+  host: localhost
+  port: 5432
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: cellular_automata_test_db
+  username: cellular_automata_test
+  password: conway
+  pool: 5
+  host: localhost
+  port: 5432
+

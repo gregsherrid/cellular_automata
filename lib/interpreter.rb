@@ -22,4 +22,12 @@ module Interpreter
 			}
 		</script>"
 	end
+
+	def display_source_and_output(source)
+		js = InterpretedProgram.new(source).js_lines
+		"<div>
+			<p class='source'>#{ source.join('<br />') }</p>
+			<p class='output'>#{ js.join('<br />') }</p>
+		</div>"
+	end
 end

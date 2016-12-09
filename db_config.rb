@@ -5,7 +5,7 @@ def init_db(env)
 	db = URI.parse(url)
 
 	ActiveRecord::Base.establish_connection(
-	  :adapter  => db.scheme == "postgres" ? "postgresql" : db.scheme,
+	  :adapter  => "postgresql",
 	  :host     => db.host,
 	  :username => db.user,
 	  :password => db.password,

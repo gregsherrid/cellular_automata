@@ -5,3 +5,4 @@ development:
     port: 5432
     username: cellular_automata
     password: conway
+    adapter: postgresql

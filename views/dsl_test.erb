@@ -1,0 +1,27 @@
+<div class="container" id="dslTest">
+	<div class="col-sm-12">
+		<h1 class="text-center">
+			Emerge DSL Test
+		</h1>
+
+		<%= display_source_and_output([
+			"RED=EAST.RED",
+			"GREEN=EAST.GREEN",
+			"BLUE=EAST.BLUE"
+		]) %>
+		<hr />
+		<%= display_source_and_output([
+			"RED=EAST.RED*2",
+			"GREEN=EAST.GREEN + 8",
+			"BLUE=EAST.BLUE - 10"
+		]) %>
+		<hr />
+		<%= display_source_and_output([
+			"x = 50",
+			"RED= EAST.RED + x",
+			"GREEN=EAST.GREEN + x % 200",
+			"BLUE=x * x"
+		]) %>
+
+	</div>
+</div>

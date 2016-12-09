@@ -7,3 +7,12 @@ canvas#cellDisplay {
 	margin: 0 auto;
 	display: block;
 }
+
+#dslTest .source {
+	font-weight: bold;
+	font-family: monospace;
+}
+
+#dslTest .output {
+	font-family: monospace;
+}
