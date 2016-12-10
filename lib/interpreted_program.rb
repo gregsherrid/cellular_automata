@@ -3,7 +3,8 @@ class InterpretedProgram
 
 	def initialize(source)
 		source = source.map { |s| s.upcase.gsub(" ", "") }
-		@variables = Set.new
+
+		@variable_mapper = VariableMapper.new
 
 		# When we need a place holder (take form: $12$), use this counter
 		@placeholder_counter = 0
@@ -23,7 +24,28 @@ class InterpretedProgram
 		tokens = reduce_expression(exp).flatten
 
 		tokens.map do |comp|
-			Token.init(comp)
+			Token.init(comp, variable_mapper: @variable_mapper)
+		end
+	end
+
+	# Class responsible for mapping souce code variables to controlled names
+	class VariableMapper
+		def initialize
+			@var_name_map = {}
+			@var_counter = 0
+		end
+
+		def new_variable?(source_var_name)
+			!@var_name_map.has_key?(source_var_name)
+		end
+
+		def get_variable_name(source_var_name)
+			if new_variable?(source_var_name)
+				@var_counter += 1
+				@var_name_map[source_var_name] = "v#{ @var_counter }"
+			end
+
+			@var_name_map[source_var_name]
 		end
 	end
 
@@ -89,7 +111,7 @@ class InterpretedProgram
 				placeholder_index = reduced_tokens.index(placeholder)
 
 				if placeholder_index.nil?
-					raise ProgramSyntaxError.new("Syntax Error (Missing Parenthesis Placeholder)", exp)
+					raise InterpreterError.new("Interpreter Error (Missing Parenthesis Placeholder)", exp)
 				end
 
 				# Reinsert the tokenized clause with wrapping parenthesis

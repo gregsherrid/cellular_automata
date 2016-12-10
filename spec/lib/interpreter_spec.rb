@@ -16,6 +16,13 @@ describe "| Interpreter" do
 				"cell.blue = pixData[cell.east.blueLoc];"
 			]
 		end
+
+		it "| Tricky assignment should be allowed" do
+			source = ["10 + (RED = (BLUE = 8 + 10))"]
+			InterpretedProgram.new(source).js_lines.should == [
+				"10 + ( cell.red = ( cell.blue = 8 + 10 ) );"
+			]
+		end
 	end
 
 	describe "| Arithmetic" do
@@ -73,12 +80,38 @@ describe "| Interpreter" do
 		end
 
 		it "| Nested" do
-			source = [
-				"BLUE = (WEST.RED * (8 + 9)) % 7"
-			]
+			source = ["BLUE = (WEST.RED * (8 + 9)) % 7"]
 			InterpretedProgram.new(source).js_lines.should == [
 				"cell.blue = ( pixData[cell.west.redLoc] * ( 8 + 9 ) ) % 7;"
 			]
 		end
+
+		it "| Unmatched Parenthesis" do
+			source = ["RED=10+(15"]
+			expect do
+				InterpretedProgram.new(source)
+			end.to raise_error(ProgramSyntaxError)
+		end
 	end
+
+	describe "| Variables" do
+		it "| Variable assignment and reference" do
+			source = [
+				"B1=EAST.BLUE",
+				"SQUID_2=NORTH.RED%10",
+				"B1+=WEST.BLUE",
+				"BLUE=B1/2",
+				"RED=SQUID_2"
+			]
+
+			InterpretedProgram.new(source).js_lines.should == [
+				"var v1 = pixData[cell.east.blueLoc];",
+				"var v2 = pixData[cell.north.redLoc] % 10;",
+				"v1 += pixData[cell.west.blueLoc];",
+				"cell.blue = v1 / 2;",
+				"cell.red = v2;"
+			]
+		end
+	end
+
 end

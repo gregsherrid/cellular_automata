@@ -1,8 +1,8 @@
 class Token
 	attr_accessor :value
 
-	def initialize(s)
-		self.value = s
+	def initialize(val)
+		self.value = val
 	end
 
 	# Default, frequently overridden
@@ -14,7 +14,7 @@ class Token
 		"#{self.class}: #{value}"
 	end
 
-	def self.init(s)
+	def self.init(s, variable_mapper: nil)
 		if s == "="
 			AssignmentToken.new(s)
 
@@ -25,7 +25,7 @@ class Token
 			CellAttributeToken.new(s)
 
 		elsif is_valid_variable?(s)
-			VariableToken.new(s)
+			VariableToken.new(s, variable_mapper: variable_mapper)
 
 		elsif is_neighbor_attribute?(s)
 			NeighborAttributeToken.new(s)
@@ -94,5 +94,23 @@ class NeighborAttributeToken < ValueToken
 end
 
 class VariableToken < ValueToken
+	def initialize(val, variable_mapper: nil)
+		super(val)
+
+		if variable_mapper.nil?
+			raise InterpreterError.new("Interpreter Error (Variable Token Requires Map)", exp)
+		end
+
+		@is_first_occurance = variable_mapper.new_variable?(val)
+		@var_name = variable_mapper.get_variable_name(val)
+	end
+
+	def js_value
+		if @is_first_occurance
+			"var #{ @var_name }"
+		else
+			@var_name
+		end
+	end
 end
 
